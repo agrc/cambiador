@@ -89,7 +89,8 @@ namespace cambiador {
         $"FROM {schema}sde_table_registry registry " +
         $"INNER JOIN {schema}sde_geometry_columns shapes ON registry.table_name = shapes.f_table_name " +
         "WHERE NOT (registry.table_name like 'SDE_%' OR table_name like 'GDB_%')";
-      var fieldMetaQuery = "SELECT LOWER(table_name) as [table], LOWER(column_name) as [field], LOWER(data_type) as fieldType " +
+        "WHERE NOT (table_name like 'SDE_%' OR table_name like 'GDB_%')";
+      var fieldMetaQuery = "SELECT LOWER(table_schema) as [schema], LOWER(table_name) as [table], LOWER(column_name) as [field], LOWER(data_type) as fieldType " +
         "FROM INFORMATION_SCHEMA.COLUMNS " +
         "WHERE table_name IN @tables AND LOWER(column_name) NOT IN @skipFields";
 
@@ -106,13 +107,13 @@ namespace cambiador {
           meta.Field = $"{meta.Field}.STAsBinary() as {meta.Field}";
         }
 
-        if (!tableFieldMap.ContainsKey(meta.Table)) {
-          tableFieldMap.Add(meta.Table, new List<string> { meta.Field });
+        if (!tableFieldMap.ContainsKey(meta.TableName())) {
+          tableFieldMap.Add(meta.TableName(), new List<string> { meta.Field });
 
           continue;
         }
 
-        tableFieldMap[meta.Table].Add(meta.Field);
+        tableFieldMap[meta.TableName()].Add(meta.Field);
       }
 
       return tableFieldMap;
