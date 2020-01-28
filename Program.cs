@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 namespace cambiador {
   internal class Program {
     private static readonly string changeTable = "CHANGEDETECTION";
+    private static readonly string schema = "sde.";
     private static readonly string updateHashSql = "UPDATE ChangeDetection SET last_modified=GETDATE(), [hash]=@hash WHERE LOWER(table_name)=LOWER(@tableName)";
     private static readonly string insertHashSql = "INSERT INTO ChangeDetection (table_name, last_modified, [hash]) VALUES (@tableName,  GETDATE(), @hash)";
     private static readonly string getHashSql = $"SELECT [hash] FROM {changeTable} WHERE LOWER(table_name)=LOWER(@tableName)";
@@ -85,8 +86,8 @@ namespace cambiador {
       var skipFields = new List<string> { "gdb_geomattr_data", "globalid", "global_id", "objectid_" };
 
       var tableMetaQuery = "SELECT LOWER(registry.table_name) as [table], LOWER(registry.rowid_column) as [id], LOWER(shapes.f_geometry_column) as [shape] " +
-        "FROM sde_table_registry registry " +
-        "INNER JOIN sde_geometry_columns shapes ON registry.table_name = shapes.f_table_name " +
+        $"FROM {schema}sde_table_registry registry " +
+        $"INNER JOIN {schema}sde_geometry_columns shapes ON registry.table_name = shapes.f_table_name " +
         "WHERE NOT (registry.table_name like 'SDE_%' OR table_name like 'GDB_%')";
       var fieldMetaQuery = "SELECT LOWER(table_name) as [table], LOWER(column_name) as [field], LOWER(data_type) as fieldType " +
         "FROM INFORMATION_SCHEMA.COLUMNS " +
