@@ -18,6 +18,7 @@ namespace cambiador {
     private static readonly string getHashSql = $"SELECT [hash] FROM {changeTable} WHERE LOWER(table_name)=LOWER(@tableName)";
 
     private static async Task Main() {
+      var totalTime = Stopwatch.StartNew();
       Console.WriteLine($"Connecting to the { "source".AsMagenta() } database");
       using var connection = Databases.SourceDatabase.GetConnection();
 
@@ -28,9 +29,11 @@ namespace cambiador {
       }
 
       Console.WriteLine($"Discovering {"tables".AsMagenta()} and {"schemas".AsMagenta()}");
+
       var tableFieldMap = await DiscoverAndGroupTablesWithFields(connection);
 
       foreach (var table in tableFieldMap) {
+        var tableTime = Stopwatch.StartNew();
         var tableName = table.Key;
         var fields = table.Value;
 
@@ -40,14 +43,20 @@ namespace cambiador {
         if (string.IsNullOrEmpty(hashAsOfLastRun) || hashAsOfLastRun != hashAsOfNow) {
           await UpsertHash(connection, tableName, hashAsOfNow);
 
+          Console.WriteLine($"Total table time: {tableTime.ElapsedMilliseconds.FriendlyFormat().AsYellow()}");
           Console.WriteLine();
 
           continue;
         }
 
+        Console.WriteLine($"Total table time: {tableTime.ElapsedMilliseconds.FriendlyFormat().AsYellow()}");
+        tableTime.Stop();
         Console.WriteLine("  No changes since last run  ".AsBlack().AsWhiteBg());
         Console.WriteLine();
       }
+
+      Console.WriteLine();
+      Console.WriteLine($"Total process time: {totalTime.ElapsedMilliseconds.FriendlyFormat().AsYellow()}");
     }
 
     private static async Task UpsertHash(SqlConnection connection, string tableName, string hashAsOfNow) {
