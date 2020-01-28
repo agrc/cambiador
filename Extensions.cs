@@ -13,14 +13,14 @@ namespace cambiador.Extensions {
       }
 
       if (seconds < 90) {
-        return $"{seconds} seconds";
+        return $"{seconds:F3} seconds";
       }
 
       if (seconds < 90 * minute) {
-        return $"{seconds / minute} minutes";
+        return $"{seconds / minute:F3} minutes";
       }
 
-      return $"{seconds / hour} hours";
+      return $"{seconds / hour:F3} hours";
     }
   }
 
