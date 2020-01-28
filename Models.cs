@@ -1,5 +1,5 @@
 
-namespace ChangeDetection.Models {
+namespace cambiador.Models {
   public class FieldMetadata {
     public string Table { get; set; }
     public string Field { get; set; }

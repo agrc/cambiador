@@ -7,9 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/ChangeDetection.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
+                "${workspaceFolder}/cambiador.csproj"
             ],
             "problemMatcher": "$msCompile"
         },
@@ -19,7 +17,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/ChangeDetection.csproj",
+                "${workspaceFolder}/cambiador.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -32,7 +30,7 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/ChangeDetection.csproj",
+                "${workspaceFolder}/cambiador.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],

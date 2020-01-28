@@ -1,4 +1,4 @@
-﻿using ChangeDetection.Models;
+﻿using cambiador.Models;
 using Dapper;
 using HashDepot;
 using System;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChangeDetection {
+namespace cambiador {
   internal class Program {
     private static async Task Main() {
       Console.WriteLine("Connecting to the databases");
