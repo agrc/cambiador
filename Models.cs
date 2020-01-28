@@ -13,10 +13,4 @@ namespace cambiador.Models {
       return $"{Schema}.{Table}";
     }
   }
-
-  public class TableMetadata {
-    public string Table { get; set; }
-    public string Id { get; set; }
-    public string Shape { get; set; }
-  }
 }
