@@ -85,22 +85,20 @@ namespace cambiador {
     private static async Task<Dictionary<string, IList<string>>> DiscoverAndGroupTablesWithFields(SqlConnection connection) {
       var skipFields = new List<string> { "gdb_geomattr_data", "globalid", "global_id", "objectid_" };
 
-      var tableMetaQuery = "SELECT LOWER(registry.table_name) as [table], LOWER(registry.rowid_column) as [id], LOWER(shapes.f_geometry_column) as [shape] " +
+      var tableMetaQuery = "SELECT LOWER(table_name) as [table] " +
         $"FROM {schema}sde_table_registry registry " +
-        $"INNER JOIN {schema}sde_geometry_columns shapes ON registry.table_name = shapes.f_table_name " +
-        "WHERE NOT (registry.table_name like 'SDE_%' OR table_name like 'GDB_%')";
         "WHERE NOT (table_name like 'SDE_%' OR table_name like 'GDB_%')";
       var fieldMetaQuery = "SELECT LOWER(table_schema) as [schema], LOWER(table_name) as [table], LOWER(column_name) as [field], LOWER(data_type) as fieldType " +
         "FROM INFORMATION_SCHEMA.COLUMNS " +
         "WHERE table_name IN @tables AND LOWER(column_name) NOT IN @skipFields";
 
-      var tableMeta = await connection.QueryAsync<TableMetadata>(tableMetaQuery);
+      var tables = await connection.QueryAsync<string>(tableMetaQuery);
       var fieldMeta = await connection.QueryAsync<FieldMetadata>(fieldMetaQuery, new {
-        tables = tableMeta.Select(x => x.Table),
+        tables,
         skipFields
       });
 
-      var tableFieldMap = new Dictionary<string, IList<string>>(tableMeta.Count());
+      var tableFieldMap = new Dictionary<string, IList<string>>(tables.Count());
 
       foreach (var meta in fieldMeta) {
         if (meta.FieldType == "geometry") {
