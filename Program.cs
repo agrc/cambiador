@@ -13,10 +13,13 @@ using System.Threading.Tasks;
 namespace cambiador {
   internal class Program {
     private static readonly string changeTable = "CHANGEDETECTION";
+    private static readonly string changeSchema = "META.";
     private static readonly string schema = "sde.";
-    private static readonly string updateHashSql = "UPDATE ChangeDetection SET last_modified=GETDATE(), [hash]=@hash WHERE LOWER(table_name)=LOWER(@tableName)";
-    private static readonly string insertHashSql = "INSERT INTO ChangeDetection (table_name, last_modified, [hash]) VALUES (@tableName,  GETDATE(), @hash)";
-    private static readonly string getHashSql = $"SELECT [hash] FROM {changeTable} WHERE LOWER(table_name)=LOWER(@tableName)";
+    private static readonly string changeTableExistSql = $"SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE LOWER(TABLE_NAME)=LOWER(@changeTable)";
+    private static readonly string updateHashSql = $"UPDATE {changeSchema}{changeTable} SET last_modified=GETDATE(), [hash]=@hash WHERE LOWER(table_name)=LOWER(@tableName)";
+    private static readonly string insertHashSql = $"INSERT INTO {changeSchema}{changeTable} (table_name, last_modified, [hash]) VALUES (@tableName, GETDATE(), @hash)";
+    private static readonly string getHashSql = $"SELECT [hash] FROM {changeSchema}{changeTable} WHERE LOWER(table_name)=LOWER(@tableName)";
+    private static readonly string hashExistsSql = $"SELECT 1 FROM {changeSchema}{changeTable} WHERE LOWER(table_name)=LOWER(@tableName)";
 
     private static async Task Main() {
       var totalTime = Stopwatch.StartNew();
@@ -39,6 +42,7 @@ namespace cambiador {
         var fields = table.Value;
 
         var hashAsOfLastRun = await connection.QuerySingleOrDefaultAsync<string>(getHashSql, new { tableName });
+        Console.WriteLine($"Gathering all rows from {tableName.AsBlue()}");
         var hashAsOfNow = await CreateHashFromTableRows(tableName, fields, connection);
 
         if (string.IsNullOrEmpty(hashAsOfLastRun) || hashAsOfLastRun != hashAsOfNow) {
@@ -63,8 +67,7 @@ namespace cambiador {
     private static async Task UpsertHash(SqlConnection connection, string tableName, string hashAsOfNow) {
       Console.WriteLine($"    Changes detected    ".AsRedBg());
 
-      var recordExists = await connection.QuerySingleOrDefaultAsync<bool>($"SELECT 1 FROM {changeTable} WHERE LOWER(table_name)=LOWER(@tableName)",
-        new { tableName });
+      var recordExists = await connection.QuerySingleOrDefaultAsync<bool>(hashExistsSql, new { tableName });
 
       if (recordExists) {
         await connection.ExecuteAsync(updateHashSql, new { hash = hashAsOfNow, tableName });
@@ -80,7 +83,7 @@ namespace cambiador {
     }
 
     // Creates the table on he first run or returns the name of the table if it already exists
-    private static async Task<bool> EnsureChangeDetectionTableExists(SqlConnection connection) => await connection.QueryFirstOrDefaultAsync<bool>($"SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE UPPER(TABLE_NAME)=@changeTable", new { changeTable });
+    private static async Task<bool> EnsureChangeDetectionTableExists(SqlConnection connection) => await connection.QueryFirstOrDefaultAsync<bool>(changeTableExistSql, new { changeTable });
 
     private static async Task<Dictionary<string, IList<string>>> DiscoverAndGroupTablesWithFields(SqlConnection connection) {
       var skipFields = new List<string> { "gdb_geomattr_data", "globalid", "global_id", "objectid_" };
@@ -119,7 +122,6 @@ namespace cambiador {
 
     private static async Task<string> CreateHashFromTableRows(string table, IEnumerable<string> fields, SqlConnection connection) {
       // get all of the data from the table
-      Console.WriteLine($"Querying {table.AsBlue()} for all data");
       var timer = Stopwatch.StartNew();
 
       var rows = await connection.QueryAsync($"SELECT {string.Join(',', fields)} FROM {table} ORDER BY OBJECTID");
