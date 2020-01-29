@@ -1,4 +1,6 @@
 
+using System.Collections.Generic;
+
 namespace cambiador.Models {
   public class FieldMetadata {
     public string Table { get; set; }
@@ -12,5 +14,12 @@ namespace cambiador.Models {
 
       return $"{Schema}.{Table}";
     }
+  }
+
+  public class Stats {
+    public int TotalRows { get; set; } = 0;
+    public ICollection<string> Changed { get; set; } = new List<string>(10);
+    public long QueryTime { get; set; } = 0;
+    public long HashTime { get; set; } = 0;
   }
 }
