@@ -22,6 +22,8 @@ namespace cambiador {
     private static readonly string insertHashSql = $"INSERT INTO {changeSchema}{changeTable} (table_name, last_modified, [hash]) VALUES (@tableName, GETDATE(), @hash)";
     private static readonly string getHashSql = $"SELECT [hash] FROM {changeSchema}{changeTable} WHERE LOWER(table_name)=LOWER(@tableName)";
     private static readonly string hashExistsSql = $"SELECT 1 FROM {changeSchema}{changeTable} WHERE LOWER(table_name)=LOWER(@tableName)";
+    private static readonly Stats stats = new Stats();
+
 
     private static async Task Main() {
       var cambiador = new (string color, string letter)[] {
@@ -62,6 +64,8 @@ namespace cambiador {
         if (string.IsNullOrEmpty(hashAsOfLastRun) || hashAsOfLastRun != hashAsOfNow) {
           await UpsertHash(connection, tableName, hashAsOfNow);
 
+          stats.Changed.Append(tableName);
+
           Console.WriteLine($"Total table time: {tableTime.ElapsedMilliseconds.FriendlyFormat().AsYellow()}");
           Console.WriteLine();
 
@@ -76,6 +80,13 @@ namespace cambiador {
 
       Console.WriteLine();
       Console.WriteLine($"Total process time: {totalTime.ElapsedMilliseconds.FriendlyFormat().AsYellow()}");
+      Console.WriteLine($"Total rows processed: {stats.TotalRows.ToString("#,##").AsBlue()}");
+      Console.WriteLine($"Total query time: {stats.QueryTime.FriendlyFormat().AsBlue()}");
+      Console.WriteLine($"Total hasing time: {stats.HashTime.FriendlyFormat().AsBlue()}");
+      Console.WriteLine($"Total tables changed: {stats.Changed.Count.ToString().AsBlue()}");
+      foreach(var table in stats.Changed) {
+        Console.WriteLine($"  {table.AsCyan()} updated");
+      }
     }
 
     private static async Task UpsertHash(SqlConnection connection, string tableName, string hashAsOfNow) {
@@ -140,10 +151,12 @@ namespace cambiador {
 
       var rows = await connection.QueryAsync($"SELECT {string.Join(',', fields)} FROM {table} ORDER BY OBJECTID");
 
+      stats.QueryTime += timer.ElapsedMilliseconds;
       Console.WriteLine($"Query completed: {timer.ElapsedMilliseconds.FriendlyFormat().AsYellow()}");
       timer.Stop();
 
       var numberOfRecords = ((List<dynamic>)rows).Count;
+      stats.TotalRows += numberOfRecords;
       var hashesAsOfNow = new StringBuilder();
 
       Console.WriteLine($"Hashing {numberOfRecords.ToString("#,##").AsCyan()} records");
@@ -170,6 +183,7 @@ namespace cambiador {
 
       var result = XXHash.Hash64(Encoding.UTF8.GetBytes(hashesAsOfNow.ToString()));
 
+      stats.HashTime += timer.ElapsedMilliseconds;
       Console.WriteLine($"Hashing completed: {timer.ElapsedMilliseconds.FriendlyFormat().AsYellow()}");
       timer.Stop();
 
