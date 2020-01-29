@@ -2,11 +2,13 @@
 using cambiador.Models;
 using Dapper;
 using HashDepot;
+using Pastel;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,7 +24,19 @@ namespace cambiador {
     private static readonly string hashExistsSql = $"SELECT 1 FROM {changeSchema}{changeTable} WHERE LOWER(table_name)=LOWER(@tableName)";
 
     private static async Task Main() {
+      var cambiador = new (string color, string letter)[] {
+          ("#185C58", "c"),
+          ("#1E736E", "a"),
+          ("#248A84", "m"),
+          ("#20B2AA", "b"),
+          ("#3FBDB6", "i"),
+          ("#5EC8C2", "a"),
+          ("#7DD3CE", "d"),
+          ("#9CDEDA", "o"),
+          ("#BBE9E6", "r")
+      };
       var totalTime = Stopwatch.StartNew();
+      Console.WriteLine($"{string.Join(string.Empty, cambiador.Select(x => x.letter.Pastel(x.color)))} {"v".AsRed() + Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion.AsRed()}");
       Console.WriteLine($"Connecting to the { "source".AsMagenta() } database");
       using var connection = Databases.SourceDatabase.GetConnection();
 
