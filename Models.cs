@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace cambiador.Models {
   public class FieldMetadata {
+    public string Db { get; set; }
     public string Table { get; set; }
     public string Field { get; set; }
     public string FieldType { get; set; }
@@ -12,7 +13,7 @@ namespace cambiador.Models {
         return Table;
       }
 
-      return $"{Schema}.{Table}";
+      return $"{Db}.{Schema}.{Table}";
     }
   }
 
