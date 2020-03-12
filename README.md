@@ -7,9 +7,13 @@ esri geodatabase change detection for sql server with a spatial data type
 1. Enterprise SQL Server with the spatial data type and tables registered with the geodatabase
 1. A table named `ChangeDetection` that is not registered with the geodatabase
 
-   1. `table_name` as `nvarchar(something)`
-   1. `last_modified` as `date` type
-   1. `hash` as `nvarchar(something)`
+   ```sql
+      CREATE TABLE [META].[ChangeDetection](
+      [table_name] [nvarchar](250) NULL,
+      [last_modified] [date] NULL,
+      [hash] [nvarchar](50) NULL
+   )
+   ````
 
 ## how it works
 
