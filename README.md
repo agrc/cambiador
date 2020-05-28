@@ -11,7 +11,8 @@ esri geodatabase change detection for sql server with a spatial data type
       CREATE TABLE [META].[ChangeDetection](
       [table_name] [nvarchar](250) NULL,
       [last_modified] [date] NULL,
-      [hash] [nvarchar](50) NULL
+      [hash] [nvarchar](50) NULL,
+      [id] [int] IDENTITY(1,1) NOT NULL
    )
    ````
 
