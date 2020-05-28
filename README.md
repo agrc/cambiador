@@ -24,6 +24,10 @@ The first time the tool is run it will update the `ChangeDetection` table with t
 
 Applications and users that are interested in taking action when data changes can query the `ChangeDetection` table and inspect the dates that are greater than the last time they checked. For instance, if a process is scheduled to run daily, querying for `last_modified` dates that equal the current date would result in the set of data to process.
 
+## running in development
+
+`dotnet run cambiador`
+
 ## deployment
 
 ### build
