@@ -2,6 +2,8 @@
 
 esri geodatabase change detection for sql server with a spatial data type
 
+![cambiador_sm](https://user-images.githubusercontent.com/325813/90076030-fd024180-dcbb-11ea-84b3-f18c825a3231.png) 
+
 ## prerequisites
 
 1. Enterprise SQL Server with the spatial data type and tables registered with the geodatabase
