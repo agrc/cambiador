@@ -149,7 +149,7 @@ namespace cambiador {
       // get all of the data from the table
       var timer = Stopwatch.StartNew();
 
-      var rows = await connection.QueryAsync($"SELECT {string.Join(',', fields)} FROM {table} ORDER BY OBJECTID");
+      var rows = await connection.QueryAsync($"SELECT {string.Join(',', fields)} FROM {table} ORDER BY OBJECTID", commandTimeout: 600);
 
       stats.QueryTime += timer.ElapsedMilliseconds;
       Console.WriteLine($"Query completed: {timer.ElapsedMilliseconds.FriendlyFormat().AsYellow()}");
