@@ -38,4 +38,4 @@ Applications and users that are interested in taking action when data changes ca
 1. bump the version in the `cambiador.csproj`
 1. build the project into a single file
    `dotnet publish -c Release /p:DebugType=None`
-1. deploy the `cambiador.exe` file that will be created in `bin/release/net5.0/win-64/publish` to the place where it will run
+1. deploy the `cambiador.exe` file that will be created in `bin/release/netcoreapp3.1/win-64/publish` to the place where it will run
