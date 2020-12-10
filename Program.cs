@@ -64,7 +64,7 @@ namespace cambiador {
         if (string.IsNullOrEmpty(hashAsOfLastRun) || hashAsOfLastRun != hashAsOfNow) {
           await UpsertHash(connection, tableName, hashAsOfNow);
 
-          stats.Changed.Append(tableName);
+          stats.Changed.Add(tableName);
 
           Console.WriteLine($"Total table time: {tableTime.ElapsedMilliseconds.FriendlyFormat().AsYellow()}");
           Console.WriteLine();
