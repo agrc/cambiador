@@ -8,6 +8,7 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <PublishReadyToRun>True</PublishReadyToRun>
     <PublishTrimmed>False</PublishTrimmed>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
