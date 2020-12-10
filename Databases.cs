@@ -3,6 +3,6 @@ using System.Data.SqlClient;
 
 namespace cambiador.Databases {
   internal static class SourceDatabase {
-    public static SqlConnection GetConnection() => new SqlConnection(ConfigurationManager.ConnectionStrings["source"].ConnectionString);
+    public static SqlConnection GetConnection() => new(ConfigurationManager.ConnectionStrings["source"].ConnectionString);
   }
 }

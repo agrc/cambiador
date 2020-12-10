@@ -1,4 +1,4 @@
-using cambiador.Extensions;
+﻿using cambiador.Extensions;
 using cambiador.Models;
 using Dapper;
 using HashDepot;
@@ -22,7 +22,7 @@ namespace cambiador {
     private static readonly string insertHashSql = $"INSERT INTO {changeSchema}{changeTable} (table_name, last_modified, [hash]) VALUES (@tableName, GETDATE(), @hash)";
     private static readonly string getHashSql = $"SELECT [hash] FROM {changeSchema}{changeTable} WHERE LOWER(table_name)=LOWER(@tableName)";
     private static readonly string hashExistsSql = $"SELECT 1 FROM {changeSchema}{changeTable} WHERE LOWER(table_name)=LOWER(@tableName)";
-    private static readonly Stats stats = new Stats();
+    private static readonly Stats stats = new();
 
 
     private static async Task Main() {
