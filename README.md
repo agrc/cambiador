@@ -2,7 +2,7 @@
 
 esri geodatabase change detection for sql server with a spatial data type
 
-![cambiador_sm](https://user-images.githubusercontent.com/325813/90076030-fd024180-dcbb-11ea-84b3-f18c825a3231.png) 
+![cambiador_sm](https://user-images.githubusercontent.com/325813/90076030-fd024180-dcbb-11ea-84b3-f18c825a3231.png)
 
 ## prerequisites
 
@@ -37,5 +37,5 @@ Applications and users that are interested in taking action when data changes ca
 1. edit the `app.config` file for the database connection
 1. bump the version in the `cambiador.csproj`
 1. build the project into a single file
-   `dotnet publish --runtime win-x64 -c Release /p:PublishSingleFile=true /p:DebugType=None`
-1. deploy the `cambiador.exe` file that will be created in `bin/release/netcoreapp-3.1/win-64/publish` to the place where it will run
+   `dotnet publish -c Release /p:DebugType=None`
+1. deploy the `cambiador.exe` file that will be created in `bin/release/net5.0/win-64/publish` to the place where it will run
