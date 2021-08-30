@@ -112,7 +112,7 @@ namespace cambiador {
     private static async Task<bool> EnsureChangeDetectionTableExists(SqlConnection connection) => await connection.QueryFirstOrDefaultAsync<bool>(changeTableExistSql, new { changeTable });
 
     private static async Task<Dictionary<string, IList<string>>> DiscoverAndGroupTablesWithFields(SqlConnection connection) {
-      var skipFields = new List<string> { "gdb_geomattr_data", "globalid", "global_id", "objectid_" };
+      var skipFields = new List<string> { "gdb_geomattr_data", "objectid_" };
 
       var tableMetaQuery = "SELECT LOWER(table_name) " +
         $"FROM {schema}sde_table_registry registry " +
