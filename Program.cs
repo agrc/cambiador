@@ -1,8 +1,3 @@
-﻿using cambiador.Extensions;
-using cambiador.Models;
-using Dapper;
-using HashDepot;
-using Pastel;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -11,6 +6,11 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using cambiador.Extensions;
+using cambiador.Models;
+using Dapper;
+using HashDepot;
+using Pastel;
 
 namespace cambiador {
   internal class Program {
@@ -85,7 +85,7 @@ namespace cambiador {
       Console.WriteLine($"Total hasing time: {stats.HashTime.FriendlyFormat().AsBlue()}");
       Console.WriteLine($"Total tables changed: {stats.Changed.Count.ToString().AsBlue()}");
 
-      foreach(var table in stats.Changed) {
+      foreach (var table in stats.Changed) {
         Console.WriteLine($"  {table.AsCyan()} updated");
       }
     }
