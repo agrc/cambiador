@@ -9,11 +9,14 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/bin/Debug/net5/cambiador.dll",
+      "program": "${workspaceFolder}/bin/Debug/net5.0/cambiador.dll",
       "args": [],
       "cwd": "${workspaceFolder}",
       "console": "internalConsole",
-      "stopAtEntry": false
+      "stopAtEntry": false,
+      "env": {
+        "TEST_VAR": "foo"
+      }
     },
     {
       "name": ".NET Core Attach",
