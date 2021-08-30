@@ -84,6 +84,7 @@ namespace cambiador {
       Console.WriteLine($"Total query time: {stats.QueryTime.FriendlyFormat().AsBlue()}");
       Console.WriteLine($"Total hasing time: {stats.HashTime.FriendlyFormat().AsBlue()}");
       Console.WriteLine($"Total tables changed: {stats.Changed.Count.ToString().AsBlue()}");
+
       foreach(var table in stats.Changed) {
         Console.WriteLine($"  {table.AsCyan()} updated");
       }
