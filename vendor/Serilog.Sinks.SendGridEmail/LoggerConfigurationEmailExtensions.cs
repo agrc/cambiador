@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Serilog.Configuration;
 using Serilog.Events;
 using Serilog.Formatting.Display;
