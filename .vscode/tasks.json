@@ -4,12 +4,21 @@
         {
             "label": "build",
             "command": "dotnet",
-            "type": "process",
+            "type": "shell",
             "args": [
-                "build",
-                "${workspaceFolder}/cambiador.csproj"
+                "build"
             ],
-            "problemMatcher": "$msCompile"
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "silent"
+            }
         },
         {
             "label": "publish",
