@@ -1,8 +1,8 @@
-using System.Configuration;
 using System.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 
 namespace cambiador.Databases {
   internal static class SourceDatabase {
-    public static SqlConnection GetConnection() => new(ConfigurationManager.ConnectionStrings["source"].ConnectionString);
+    public static SqlConnection GetConnection(IConfiguration configuration) => new(configuration.GetConnectionString("source"));
   }
 }
