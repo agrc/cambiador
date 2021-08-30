@@ -8,7 +8,7 @@
     <PublishReadyToRun>True</PublishReadyToRun>
     <PublishTrimmed>False</PublishTrimmed>
     <LangVersion>preview</LangVersion>
-    <Version>1.0.1</Version>
+    <Version>1.2.0</Version>
     <Nullable>Enable</Nullable>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
   </PropertyGroup>
