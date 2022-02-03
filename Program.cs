@@ -85,7 +85,14 @@ namespace cambiador {
           .QuerySingleOrDefaultAsync<string>(getHashSql, new { tableName })
           .ConfigureAwait(false);
         Log.Debug($"Gathering all rows from {tableName.AsBlue()}");
-        var hashAsOfNow = await CreateHashFromTableRows(tableName, fields, connection).ConfigureAwait(false);
+
+        var hashAsOfNow = string.Empty;
+        try {
+          hashAsOfNow = await CreateHashFromTableRows(tableName, fields, connection).ConfigureAwait(false);
+        } catch (Exception ex) {
+          Log.Error(ex, $"Error while hashing {tableName.AsRed()}");
+          continue;
+        }
 
         if (string.IsNullOrEmpty(hashAsOfLastRun) || hashAsOfLastRun != hashAsOfNow) {
           await UpsertHash(connection, tableName, hashAsOfNow).ConfigureAwait(false);
