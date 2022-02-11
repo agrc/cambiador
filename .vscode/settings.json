@@ -1,15 +1,23 @@
 {
   "cSpell.words": [
-    "STAs",
-    "Serilog",
+    "accesstoken",
     "argb",
+    "ASPNETCORE",
+    "backoff",
     "cambiador",
+    "cloudrun",
     "from",
+    "gcloud",
     "geodatabase",
     "geomattr",
     "globalid",
     "nvarchar",
     "objectid",
-    "rowid"
+    "oidc",
+    "rowid",
+    "sendgrid",
+    "Serilog",
+    "SGID",
+    "STAs"
   ]
 }

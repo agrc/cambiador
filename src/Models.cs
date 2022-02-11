@@ -1,7 +1,4 @@
-
-using System.Collections.Generic;
-
-namespace cambiador.Models {
+namespace cambiador {
   public class FieldMetadata {
     public string Db { get; set; } = default!;
     public string Table { get; set; } = default!;

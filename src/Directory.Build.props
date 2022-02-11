@@ -1,0 +1,7 @@
+<Project>
+  <ItemGroup>
+    <Using Include="cambiador" />
+    <Using Include="Serilog" />
+    <Using Include="Serilog.Events" />
+  </ItemGroup>
+</Project>
