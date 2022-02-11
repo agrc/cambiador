@@ -1,0 +1,8 @@
+**/.github
+**/.vscode
+**/bin
+**/obj
+**/secrets
+.editorconfig
+omnisharp.json
+readme.md
