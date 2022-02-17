@@ -78,7 +78,7 @@ jobs:
 
       - name: 🕰️ Create cloud scheduler
         run: |
-          if [ ! "$(gcloud scheduler jobs list | grep app)" ]; then
+          if [ ! "$(gcloud scheduler jobs list --location=us-west3 | grep app)" ]; then
             gcloud scheduler jobs create http app \
               --description="Trigger the app bot once a week on monday morning" \
               --schedule="0 5,11,17,23 * * *" \
@@ -89,6 +89,7 @@ jobs:
               --min-backoff=1m \
               --max-backoff=10m \
               --oidc-service-account-email=cloud-scheduler-sa@${{ secrets.PROJECT_ID }}.iam.gserviceaccount.com \
+              --location=us-west3 \
               --quiet
           else
             gcloud scheduler jobs update http app \
@@ -101,6 +102,7 @@ jobs:
               --min-backoff=1m \
               --max-backoff=10m \
               --oidc-service-account-email=cloud-scheduler-sa@${{ secrets.PROJECT_ID }}.iam.gserviceaccount.com \
+              --location=us-west3 \
               --quiet
           fi
 
@@ -171,7 +173,7 @@ jobs:
 
       - name: 🕰️ Create cloud scheduler
         run: |
-          if [ ! "$(gcloud scheduler jobs list | grep app)" ]; then
+          if [ ! "$(gcloud scheduler jobs list --location=us-west3 | grep app)" ]; then
             gcloud scheduler jobs create http app \
               --description="Trigger the app bot once a week on monday morning" \
               --schedule="0 5,11,17,23 * * *" \
@@ -182,6 +184,7 @@ jobs:
               --min-backoff=1m \
               --max-backoff=10m \
               --oidc-service-account-email=cloud-scheduler-sa@${{ secrets.PROJECT_ID }}.iam.gserviceaccount.com \
+              --location=us-west3 \
               --quiet
           else
             gcloud scheduler jobs update http app \
@@ -194,5 +197,6 @@ jobs:
               --min-backoff=1m \
               --max-backoff=10m \
               --oidc-service-account-email=cloud-scheduler-sa@${{ secrets.PROJECT_ID }}.iam.gserviceaccount.com \
+              --location=us-west3 \
               --quiet
           fi
