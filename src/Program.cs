@@ -7,6 +7,6 @@ var app = builder.Build();
 app.UseSerilogRequestLogging();
 
 app.MapGet("/", () => "ready");
-app.MapGet("/scheduled", async () => await ChangeDetection.DetectChanges(builder.Configuration["connection"].Trim()));
+app.MapPost("/scheduled", async () => await ChangeDetection.DetectChanges(builder.Configuration["connection"].Trim()));
 
 app.Run();
