@@ -73,7 +73,7 @@ namespace cambiador {
       Log.Information($"Total process time: {totalTime.ElapsedMilliseconds.FriendlyFormat()}");
       Log.Information($"Total rows processed: {stats.TotalRows}");
       Log.Information($"Total query time: {stats.QueryTime.FriendlyFormat()}");
-      Log.Information($"Total hasing time: {stats.HashTime.FriendlyFormat()}");
+      Log.Information($"Total hashing time: {stats.HashTime.FriendlyFormat()}");
       Log.Information($"Total tables changed: {stats.Changed.Count}");
 
       foreach (var table in stats.Changed) {
