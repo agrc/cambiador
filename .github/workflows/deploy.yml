@@ -82,7 +82,7 @@ jobs:
           if [ ! "$(gcloud scheduler jobs list --location=us-west3 | grep app)" ]; then
             gcloud scheduler jobs create http app \
               --description="Trigger the app bot once a week on monday morning" \
-              --schedule="0 5,11,17,23 * * *" \
+              --schedule="0 1,7,13,19 * * *" \
               --time-zone=America/Denver \
               --uri=$(gcloud run services describe app --region us-west3 --format 'value(status.url)')/scheduled \
               --http-method=POST \
@@ -97,7 +97,7 @@ jobs:
           else
             gcloud scheduler jobs update http app \
               --description="Trigger the app bot once a week on monday morning" \
-              --schedule="0 5,11,17,23 * * *" \
+              --schedule="0 1,7,13,19 * * *" \
               --time-zone=America/Denver \
               --uri=$(gcloud run services describe app --region us-west3 --format 'value(status.url)')/scheduled \
               --http-method=POST \
@@ -182,7 +182,7 @@ jobs:
           if [ ! "$(gcloud scheduler jobs list --location=us-west3 | grep app)" ]; then
             gcloud scheduler jobs create http app \
               --description="Trigger the app bot once a week on monday morning" \
-              --schedule="0 5,11,17,23 * * *" \
+              --schedule="0 1,7,13,19 * * *" \
               --time-zone=America/Denver \
               --uri=$(gcloud run services describe app --region us-west3 --format 'value(status.url)')/scheduled \
               --http-method=POST \
@@ -197,7 +197,7 @@ jobs:
           else
             gcloud scheduler jobs update http app \
               --description="Trigger the app bot once a week on monday morning" \
-              --schedule="0 5,11,17,23 * * *" \
+              --schedule="0 1,7,13,19 * * *" \
               --time-zone=America/Denver \
               --uri=$(gcloud run services describe app --region us-west3 --format 'value(status.url)')/scheduled \
               --http-method=POST \
