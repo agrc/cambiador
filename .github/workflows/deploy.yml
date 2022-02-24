@@ -68,7 +68,7 @@ jobs:
             --vpc-egress=all-traffic
             --max-instances=1
             --concurrency=1
-            --cpu=3000m
+            --cpu=2
             --memory=6Gi
             --timeout=30m
           env_vars: |
@@ -168,7 +168,7 @@ jobs:
             --vpc-egress=all-traffic
             --max-instances=1
             --concurrency=1
-            --cpu=3000m
+            --cpu=4
             --memory=6Gi
             --timeout=30m
           env_vars: |
