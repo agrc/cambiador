@@ -67,8 +67,9 @@ jobs:
             --vpc-connector=${{ secrets.VPC }}
             --vpc-egress=all-traffic
             --max-instances=1
-            --cpu=2000m
-            --memory=8Gi
+            --concurrency=1
+            --cpu=3000m
+            --memory=6Gi
             --timeout=30m
           env_vars: |
             ASPNETCORE_URLS=http://+:8080
@@ -85,9 +86,11 @@ jobs:
               --time-zone=America/Denver \
               --uri=$(gcloud run services describe app --region us-west3 --format 'value(status.url)')/scheduled \
               --http-method=POST \
-              --max-retry-attempts=3 \
-              --min-backoff=1m \
-              --max-backoff=10m \
+              --max-retry-attempts=0 \
+              --min-backoff=30m \
+              --max-backoff=1h \
+              --max-doublings=1 \
+              --attempt-deadline=30m \
               --oidc-service-account-email=cloud-scheduler-sa@${{ secrets.PROJECT_ID }}.iam.gserviceaccount.com \
               --location=us-west3 \
               --quiet
@@ -98,9 +101,11 @@ jobs:
               --time-zone=America/Denver \
               --uri=$(gcloud run services describe app --region us-west3 --format 'value(status.url)')/scheduled \
               --http-method=POST \
-              --max-retry-attempts=3 \
-              --min-backoff=1m \
-              --max-backoff=10m \
+              --max-retry-attempts=0 \
+              --min-backoff=30m \
+              --max-backoff=1h \
+              --max-doublings=1 \
+              --attempt-deadline=30m \
               --oidc-service-account-email=cloud-scheduler-sa@${{ secrets.PROJECT_ID }}.iam.gserviceaccount.com \
               --location=us-west3 \
               --quiet
@@ -162,8 +167,9 @@ jobs:
             --vpc-connector=${{ secrets.VPC }}
             --vpc-egress=all-traffic
             --max-instances=1
-            --cpu=2000m
-            --memory=8Gi
+            --concurrency=1
+            --cpu=3000m
+            --memory=6Gi
             --timeout=30m
           env_vars: |
             ASPNETCORE_URLS=http://+:8080
@@ -180,9 +186,11 @@ jobs:
               --time-zone=America/Denver \
               --uri=$(gcloud run services describe app --region us-west3 --format 'value(status.url)')/scheduled \
               --http-method=POST \
-              --max-retry-attempts=3 \
-              --min-backoff=1m \
-              --max-backoff=10m \
+              --max-retry-attempts=0 \
+              --min-backoff=30m \
+              --max-backoff=1h \
+              --max-doublings=1 \
+              --attempt-deadline=30m \
               --oidc-service-account-email=cloud-scheduler-sa@${{ secrets.PROJECT_ID }}.iam.gserviceaccount.com \
               --location=us-west3 \
               --quiet
@@ -193,9 +201,11 @@ jobs:
               --time-zone=America/Denver \
               --uri=$(gcloud run services describe app --region us-west3 --format 'value(status.url)')/scheduled \
               --http-method=POST \
-              --max-retry-attempts=3 \
-              --min-backoff=1m \
-              --max-backoff=10m \
+              --max-retry-attempts=0 \
+              --min-backoff=30m \
+              --max-backoff=1h \
+              --max-doublings=1 \
+              --attempt-deadline=30m \
               --oidc-service-account-email=cloud-scheduler-sa@${{ secrets.PROJECT_ID }}.iam.gserviceaccount.com \
               --location=us-west3 \
               --quiet
