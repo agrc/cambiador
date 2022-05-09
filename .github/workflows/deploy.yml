@@ -10,15 +10,16 @@ concurrency:
   group: "${{ github.head_ref || github.ref }}"
   cancel-in-progress: true
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   deploy-dev:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/dev'
     environment:
       name: dev
-    permissions:
-      id-token: write
-      contents: read
 
     steps:
       - name: ⬇️ Set up code
@@ -116,9 +117,6 @@ jobs:
     if: github.ref == 'refs/heads/main'
     environment:
       name: prod
-    permissions:
-      id-token: write
-      contents: read
 
     steps:
       - name: ⬇️ Set up code
