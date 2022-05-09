@@ -70,7 +70,7 @@ jobs:
             --concurrency=1
             --cpu=2
             --memory=6Gi
-            --timeout=60m
+            --timeout=30m
           env_vars: |
             ASPNETCORE_URLS=http://+:8080
           secrets: |
@@ -90,7 +90,7 @@ jobs:
               --min-backoff=30m \
               --max-backoff=1h \
               --max-doublings=1 \
-              --attempt-deadline=60m \
+              --attempt-deadline=30m \
               --oidc-service-account-email=cloud-scheduler-sa@${{ secrets.PROJECT_ID }}.iam.gserviceaccount.com \
               --location=us-west3 \
               --quiet
@@ -102,10 +102,10 @@ jobs:
               --uri=$(gcloud run services describe app --region us-west3 --format 'value(status.url)')/scheduled \
               --http-method=POST \
               --max-retry-attempts=0 \
-              --min-backoff=60m \
+              --min-backoff=30m \
               --max-backoff=1h \
               --max-doublings=1 \
-              --attempt-deadline=60m \
+              --attempt-deadline=30m \
               --oidc-service-account-email=cloud-scheduler-sa@${{ secrets.PROJECT_ID }}.iam.gserviceaccount.com \
               --location=us-west3 \
               --quiet
@@ -170,7 +170,7 @@ jobs:
             --concurrency=1
             --cpu=4
             --memory=6Gi
-            --timeout=60m
+            --timeout=30m
           env_vars: |
             ASPNETCORE_URLS=http://+:8080
           secrets: |
@@ -187,10 +187,10 @@ jobs:
               --uri=$(gcloud run services describe app --region us-west3 --format 'value(status.url)')/scheduled \
               --http-method=POST \
               --max-retry-attempts=0 \
-              --min-backoff=60m \
+              --min-backoff=30m \
               --max-backoff=1h \
               --max-doublings=1 \
-              --attempt-deadline=60m \
+              --attempt-deadline=30m \
               --oidc-service-account-email=cloud-scheduler-sa@${{ secrets.PROJECT_ID }}.iam.gserviceaccount.com \
               --location=us-west3 \
               --quiet
