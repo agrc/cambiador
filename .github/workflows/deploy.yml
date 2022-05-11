@@ -188,8 +188,8 @@ jobs:
             --vpc-egress=all-traffic
             --max-instances=1
             --concurrency=1
-            --cpu=8
-            --memory=12Gi
+            --cpu=3
+            --memory=4Gi
             --timeout=30m
           env_vars: |
             ASPNETCORE_URLS=http://+:8080
