@@ -65,7 +65,7 @@ namespace cambiador {
           continue;
         }
 
-        Log.Information($"Total table time: {tableTime.ElapsedMilliseconds.FriendlyFormat()}");
+        Log.Information($"Total table time: ({tableName}) {tableTime.ElapsedMilliseconds.FriendlyFormat()}");
         tableTime.Stop();
         Log.Debug("  No changes since last run");
       }
