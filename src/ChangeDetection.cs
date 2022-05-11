@@ -107,6 +107,26 @@ namespace cambiador {
 
     private static async Task<Dictionary<string, IList<string>>> DiscoverAndGroupTablesWithFields(SqlConnection connection) {
       var skipFields = new List<string> { "gdb_geomattr_data", "objectid_" };
+      var skipSchemas = new[] { "demographic", "elevation", "meta" };
+      var skipTables = new[] {
+        "boundaries.usstates", "boundaries.utah", "boundaries.utahinlandportauthority_hb2001",
+        "boundaries.utahinlandportauthority_hb2002", "boundaries.utahinlandportauthority_hb2003",
+        "boundaries.wilderness_blm98reinventory", "boundaries.wilderness_blmsuitability", "boundaries.wilderness_blmwsas",
+        "energy.coaldepositareas1988", "health.healthsmallstatisticalareas2017", "health.healthsmallstatisticalareas2018",
+        "health.healthsmallstatisticalareas2020", "indices.nationalgrid", "indices.usgs100kquads", "indices.usgs24kquads",
+        "indices.usgs24kquarterquads", "indices.usgs250kquads1x1", "indices.usgs250kquads1x2", "indices.usgs_dem_extents",
+        "location.lucablockaddresscounts2017", "planning.publiclandsinitiativehr5780areas_blm2016",
+        "planning.publiclandsinitiativehr5780lines_blm2016", "planning.utahpli_areas_proposal_jan16",
+        "planning.utahpli_lines_proposal_jan16", "planning.wildernessprop_hr1500", "planning.wildernessprop_hr1745",
+        "planning.wildernessprop_nineco1995", "planning.wildernessprop_redrock", "planning.wildernessprop_uwa1995",
+        "planning.wildernessprop_uwc1989", "planning.wildernessprop_uwc1995", "planning.wildernessprop_uwc2008",
+        "planning.wildernessprop_washingtonco", "planning.wildernessprop_wdesert1999", "political.districtcombinationareas2012",
+        "political.districtcombinationareas2022", "political.judicialdistricts", "political.uniquehousesenate2002",
+        "political.uscongressdistricts2002", "political.uscongressdistricts2012", "political.uscongressdistricts2022to2032",
+        "political.utahhousedistricts2002", "political.utahhousedistricts2012", "political.utahhousedistricts2022to2032",
+        "political.utahschoolboarddistricts2012", "political.utahschoolboarddistricts2015", "political.utahschoolboarddistricts2022to2032",
+        "political.utahsenatedistricts2002", "political.utahsenatedistricts2012", "political.utahsenatedistricts2022to2032",
+      };
 
       const string? tableMetaQuery = "SELECT LOWER(table_name) " +
         $"FROM {schema}sde_table_registry registry " +
@@ -124,6 +144,18 @@ namespace cambiador {
       var tableFieldMap = new Dictionary<string, IList<string>>(tables.Count());
 
       foreach (var meta in fieldMeta) {
+        if (skipSchemas.Contains(meta.Schema)) {
+          Log.Information($"Treating as static, skipping: {meta.TableName}");
+
+          continue;
+        }
+
+        if (skipTables.Contains($"{meta.Schema}.{meta.Table}")) {
+          Log.Information($"Treating as static, skipping: {meta.TableName}");
+
+          continue;
+        }
+
         if (meta.FieldType == "geometry") {
           meta.Field = $"{meta.Field}.STAsBinary() as {meta.Field}";
         }
