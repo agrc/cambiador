@@ -10,7 +10,7 @@ namespace cambiador {
     private const string changeTable = "CHANGEDETECTION";
     private const string changeSchema = "META.";
     private const string schema = "sde.";
-    private static readonly string changeTableExistSql = "SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE LOWER(TABLE_NAME)=LOWER(@changeTable)";
+    private const string changeTableExistSql = "SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE LOWER(TABLE_NAME)=LOWER(@changeTable)";
     private static readonly string updateHashSql = $"UPDATE {changeSchema}{changeTable} SET last_modified=GETDATE(), [hash]=@hash WHERE LOWER(table_name)=LOWER(@tableName)";
     private static readonly string insertHashSql = $"INSERT INTO {changeSchema}{changeTable} (table_name, last_modified, [hash]) VALUES (@tableName, GETDATE(), @hash)";
     private static readonly string getHashSql = $"SELECT [hash] FROM {changeSchema}{changeTable} WHERE LOWER(table_name)=LOWER(@tableName)";
@@ -60,7 +60,7 @@ namespace cambiador {
 
           stats.Changed.Add(tableName);
 
-          Log.Debug($"Total table time: {tableTime.ElapsedMilliseconds.FriendlyFormat()}");
+          Log.Debug($"Total table time: ({tableName}) {tableTime.ElapsedMilliseconds.FriendlyFormat()}");
 
           continue;
         }
@@ -140,9 +140,7 @@ namespace cambiador {
       return tableFieldMap;
     }
 
-    private static async Task<string> CreateHashFromTableRows(string table,
-                                                              IEnumerable<string> fields,
-                                                              SqlConnection connection) {
+    private static async Task<string> CreateHashFromTableRows(string table, IEnumerable<string> fields, SqlConnection connection) {
       // get all of the data from the table
       var timer = Stopwatch.StartNew();
 
