@@ -145,13 +145,13 @@ namespace cambiador {
 
       foreach (var meta in fieldMeta) {
         if (skipSchemas.Contains(meta.Schema)) {
-          Log.Information($"Treating as static, skipping: {meta.TableName}");
+          Log.Information($"Treating as static, skipping: {meta.TableName()}");
 
           continue;
         }
 
         if (skipTables.Contains($"{meta.Schema}.{meta.Table}")) {
-          Log.Information($"Treating as static, skipping: {meta.TableName}");
+          Log.Information($"Treating as static, skipping: {meta.TableName()}");
 
           continue;
         }
