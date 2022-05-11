@@ -16,6 +16,7 @@ permissions:
 
 jobs:
   deploy-dev:
+    name: Development Deployment Job
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/dev'
     environment:
@@ -23,7 +24,7 @@ jobs:
 
     steps:
       - name: ⬇️ Set up code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: 🗝️ Authenticate to Google Cloud
         id: auth
@@ -34,31 +35,41 @@ jobs:
           workload_identity_provider: ${{ secrets.IDENTITY_PROVIDER }}
           service_account: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
 
-      - name: 🐳 Setup docker
+      - name: 🐳 Set up Docker Buildx
+        id: builder
+        uses: docker/setup-buildx-action@v1
+
+      - name: 🗝️ Authenticate Docker to Google Cloud
         uses: docker/login-action@v1
         with:
           registry: gcr.io
           username: oauth2accesstoken
           password: ${{ steps.auth.outputs.access_token }}
 
-      - name: ✂️ Set short commit hash
-        run: |
-          echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+      - name: 🏷️ Extract tags from GitHub
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: gcr.io/${{ secrets.PROJECT_ID }}/app
+          tags: |
+            type=ref,suffix=-{{sha}},event=branch
+            type=ref,prefix=pr-,suffix=-{{sha}},event=pr
+            type=semver,pattern={{version}}
+            latest
 
-      - name: 📦 Build image
-        run: |-
-          docker build \
-            --tag gcr.io/${{ secrets.PROJECT_ID }}/app:$SHORT_SHA \
-            --tag gcr.io/${{ secrets.PROJECT_ID }}/app:latest \
-            .
-
-      - name: 📤 Publish image
-        run: |-
-          docker push --all-tags gcr.io/${{ secrets.PROJECT_ID }}/app
+      - name: 📦 Build and push image
+        uses: docker/build-push-action@v3
+        with:
+          builder: ${{ steps.builder.outputs.name }}
+          tags: ${{ steps.meta.outputs.tags }}
+          context: .
+          push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: 🚀 Deploy to Cloud Run
         id: deploy
-        uses: google-github-actions/deploy-cloudrun@v0
+        uses: google-github-actions/deploy-cloudrun@v0.9.0
         with:
           service: app
           image: gcr.io/${{ secrets.PROJECT_ID }}/app
@@ -78,7 +89,7 @@ jobs:
             /secrets/db/connection=database-connections:latest
             /secrets/email/key=sendgrid-api:latest
 
-      - name: 🕰️ Create cloud scheduler
+      - name: 🕰️ Create Cloud Scheduler
         run: |
           if [ ! "$(gcloud scheduler jobs list --location=us-west3 | grep app)" ]; then
             gcloud scheduler jobs create http app \
@@ -113,6 +124,7 @@ jobs:
           fi
 
   deploy-prod:
+    name: Production Deployment Job
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     environment:
@@ -120,7 +132,7 @@ jobs:
 
     steps:
       - name: ⬇️ Set up code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: 🗝️ Authenticate to Google Cloud
         id: auth
@@ -131,31 +143,41 @@ jobs:
           workload_identity_provider: ${{ secrets.IDENTITY_PROVIDER }}
           service_account: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
 
-      - name: 🐳 Setup docker
+      - name: 🐳 Set up Docker Buildx
+        id: builder
+        uses: docker/setup-buildx-action@v1
+
+      - name: 🗝️ Authenticate Docker to Google Cloud
         uses: docker/login-action@v1
         with:
           registry: gcr.io
           username: oauth2accesstoken
           password: ${{ steps.auth.outputs.access_token }}
 
-      - name: ✂️ Set short commit hash
-        run: |
-          echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+      - name: 🏷️ Extract tags from GitHub
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: gcr.io/${{ secrets.PROJECT_ID }}/app
+          tags: |
+            type=ref,suffix=-{{sha}},event=branch
+            type=ref,prefix=pr-,suffix=-{{sha}},event=pr
+            type=semver,pattern={{version}}
+            latest
 
-      - name: 📦 Build image
-        run: |-
-          docker build \
-            --tag gcr.io/${{ secrets.PROJECT_ID }}/app:$SHORT_SHA \
-            --tag gcr.io/${{ secrets.PROJECT_ID }}/app:latest \
-            .
-
-      - name: 📤 Publish image
-        run: |-
-          docker push --all-tags gcr.io/${{ secrets.PROJECT_ID }}/app
+      - name: 📦 Build and push image
+        uses: docker/build-push-action@v3
+        with:
+          builder: ${{ steps.builder.outputs.name }}
+          tags: ${{ steps.meta.outputs.tags }}
+          context: .
+          push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: 🚀 Deploy to Cloud Run
         id: deploy
-        uses: google-github-actions/deploy-cloudrun@v0
+        uses: google-github-actions/deploy-cloudrun@v0.9.0
         with:
           service: app
           image: gcr.io/${{ secrets.PROJECT_ID }}/app
@@ -175,7 +197,7 @@ jobs:
             /secrets/db/connection=database-connections:latest
             /secrets/email/key=sendgrid-api:latest
 
-      - name: 🕰️ Create cloud scheduler
+      - name: 🕰️ Create Cloud Scheduler
         run: |
           if [ ! "$(gcloud scheduler jobs list --location=us-west3 | grep app)" ]; then
             gcloud scheduler jobs create http app \
