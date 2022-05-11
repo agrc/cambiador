@@ -188,7 +188,7 @@ jobs:
             --vpc-egress=all-traffic
             --max-instances=1
             --concurrency=1
-            --cpu=3
+            --cpu=4
             --memory=4Gi
             --timeout=30m
           env_vars: |
