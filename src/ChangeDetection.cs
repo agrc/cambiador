@@ -150,6 +150,12 @@ namespace cambiador {
           continue;
         }
 
+        if (meta.Table.EndsWith("_temp")) {
+          Log.Information($"Found swapping temp table, skipping: {meta.TableName()}");
+
+          continue;
+        }
+
         if (skipTables.Contains($"{meta.Schema}.{meta.Table}")) {
           Log.Information($"Treating as static, skipping: {meta.TableName()}");
 
