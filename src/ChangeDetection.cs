@@ -130,7 +130,7 @@ namespace cambiador {
 
       const string? tableMetaQuery = "SELECT LOWER(table_name) " +
         $"FROM {schema}sde_table_registry registry " +
-        "WHERE NOT (table_name like 'SDE_%' OR table_name like 'GDB_%')";
+        "WHERE NOT (table_name like 'SDE_%' OR table_name like 'GDB_%' OR table_name like '_temp')"; // _temp is for swapper tables
       const string? fieldMetaQuery = "SELECT LOWER(table_cataLog) as [db], LOWER(table_schema) as [schema], LOWER(table_name) as [table], LOWER(column_name) as [field], LOWER(data_type) as fieldType " +
         "FROM INFORMATION_SCHEMA.COLUMNS " +
         "WHERE table_name IN @tables AND LOWER(column_name) NOT IN @skipFields";
