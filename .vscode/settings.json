@@ -5,11 +5,13 @@
     "ASPNETCORE",
     "backoff",
     "cambiador",
+    "CHANGEDETECTION",
     "cloudrun",
     "from",
     "gcloud",
     "geodatabase",
     "geomattr",
+    "GETDATE",
     "globalid",
     "nvarchar",
     "objectid",
@@ -18,6 +20,7 @@
     "sendgrid",
     "Serilog",
     "SGID",
-    "STAs"
+    "STAs",
+    "Upsert"
   ]
 }
