@@ -101,7 +101,7 @@ internal static class ChangeDetection {
       return Enumerable.Empty<string>();
     }
 
-    await connection.ExecuteAsync(trimTablesSql, tables.Select(x => x.Id));
+    await connection.ExecuteAsync(trimTablesSql, new { ids = tables.Select(x => x.Id) });
 
     return tables.Select(x => x.TableName);
   }
