@@ -15,7 +15,10 @@ namespace cambiador {
     private static readonly string insertHashSql = $"INSERT INTO {changeSchema}{changeTable} (table_name, last_modified, [hash]) VALUES (@tableName, GETDATE(), @hash)";
     private static readonly string getHashSql = $"SELECT [hash] FROM {changeSchema}{changeTable} WHERE LOWER(table_name)=LOWER(@tableName)";
     private static readonly string hashExistsSql = $"SELECT 1 FROM {changeSchema}{changeTable} WHERE LOWER(table_name)=LOWER(@tableName)";
+    private static readonly string extraTablesSql = $"SELECT table_name, id FROM {changeSchema}{changeTable} cd WHERE NOT EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES s WHERE lower(s.TABLE_CATALOG) + '.' + lower(s.TABLE_SCHEMA) + '.' + lower(s.TABLE_NAME) = cd.table_name)";
+    private static readonly string trimTablesSql = $"DELETE FROM TABLE {changeSchema}{changeTable} WHERE id IN (@ids)";
     private static readonly Stats stats = new();
+    private record TrimData(string TableName, int Id);
 
     public static async Task<bool> DetectChanges(string connectionString) {
       var totalTime = Stopwatch.StartNew();
@@ -23,8 +26,6 @@ namespace cambiador {
         .GetEntryAssembly()?
         .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
         .InformationalVersion ?? "0.0.0";
-
-      Log.Information($"Starting Change Detection: {version}");
 
       Log.Debug("Connecting to the source database");
       using var connection = new SqlConnection(connectionString);
@@ -34,6 +35,12 @@ namespace cambiador {
 
         return false;
       }
+
+      Log.Information("Managing change detection table");
+      var tables = await TrimChangeDetectionTablesNotInSource(connection);
+      Log.Information("{tables} were removed from the change detection table", tables);
+
+      Log.Information($"Starting Change Detection: {version}");
 
       Log.Debug("Discovering tables and schemas");
 
@@ -81,6 +88,18 @@ namespace cambiador {
       }
 
       return true;
+    }
+
+    private static async Task<IEnumerable<string>> TrimChangeDetectionTablesNotInSource(SqlConnection connection) {
+      var tables = await connection.QueryAsync<TrimData>(extraTablesSql);
+
+      if (!tables.Any()) {
+        return Enumerable.Empty<string>();
+      }
+
+      await connection.ExecuteAsync(trimTablesSql, tables.Select(x => x.Id));
+
+      return tables.Select(x => x.TableName);
     }
 
     private static async Task UpsertHash(SqlConnection connection, string tableName, string hashAsOfNow) {
