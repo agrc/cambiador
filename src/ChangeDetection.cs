@@ -147,12 +147,20 @@ namespace cambiador {
         "political.utahsenatedistricts2002", "political.utahsenatedistricts2012", "political.utahsenatedistricts2022to2032",
       };
 
+      var orderBy = "ASC";
+      if (DateTime.Now.Hour > 10) {
+        orderBy = "DESC";
+      }
+
+      Log.Information("Using {order}, because time is {time}", orderBy, DateTime.Now.Hour);
+
       const string? tableMetaQuery = "SELECT LOWER(table_name) " +
         $"FROM {schema}sde_table_registry registry " +
         "WHERE NOT (table_name like 'SDE_%' OR table_name like 'GDB_%')";
-      const string? fieldMetaQuery = "SELECT LOWER(table_cataLog) as [db], LOWER(table_schema) as [schema], LOWER(table_name) as [table], LOWER(column_name) as [field], LOWER(data_type) as fieldType " +
+      var fieldMetaQuery = "SELECT LOWER(table_cataLog) as [db], LOWER(table_schema) as [schema], LOWER(table_name) as [table], LOWER(column_name) as [field], LOWER(data_type) as fieldType " +
         "FROM INFORMATION_SCHEMA.COLUMNS " +
-        "WHERE table_name IN @tables AND LOWER(column_name) NOT IN @skipFields";
+        "WHERE table_name IN @tables AND LOWER(column_name) NOT IN @skipFields " +
+        $"ORDER BY [db], [schema], [table], [field] {orderBy}";
 
       var tables = await connection.QueryAsync<string>(tableMetaQuery);
       var fieldMeta = await connection.QueryAsync<FieldMetadata>(fieldMetaQuery, new {
