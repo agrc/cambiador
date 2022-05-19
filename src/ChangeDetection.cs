@@ -21,7 +21,7 @@ internal static class ChangeDetection {
   private static readonly string getHashSql = $"SELECT [hash] FROM {changeSchema}{changeTable} WHERE LOWER(table_name)=LOWER(@tableName)";
   private static readonly string hashExistsSql = $"SELECT 1 FROM {changeSchema}{changeTable} WHERE LOWER(table_name)=LOWER(@tableName)";
   private static readonly string extraTablesSql = $"SELECT table_name, id FROM {changeSchema}{changeTable} cd WHERE NOT EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES s WHERE lower(s.TABLE_CATALOG) + '.' + lower(s.TABLE_SCHEMA) + '.' + lower(s.TABLE_NAME) = cd.table_name)";
-  private static readonly string trimTablesSql = $"DELETE FROM {changeSchema}{changeTable} WHERE id IN (@ids)";
+  private static readonly string trimTablesSql = $"DELETE FROM {changeSchema}{changeTable} WHERE id IN @ids";
   private static readonly Stats stats = new();
 
   public static async Task<bool> DetectChanges(string connectionString) {
