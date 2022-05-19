@@ -71,7 +71,7 @@ internal static class ChangeDetection {
 
         stats.Changed.Add(tableName);
 
-        Log.Debug($"Total table time: ({tableName}) {tableTime.ElapsedMilliseconds.FriendlyFormat()}");
+        Log.Information($"Total table time: ({tableName}) {tableTime.ElapsedMilliseconds.FriendlyFormat()}");
 
         continue;
       }
@@ -217,7 +217,7 @@ internal static class ChangeDetection {
       .QueryAsync($"SELECT {string.Join(',', fields)} FROM {table} ORDER BY OBJECTID", commandTimeout: 600);
 
     stats.QueryTime += timer.ElapsedMilliseconds;
-    Log.Debug($"Query completed: {timer.ElapsedMilliseconds.FriendlyFormat()}");
+    Log.Information($"Query completed: {timer.ElapsedMilliseconds.FriendlyFormat()}");
     timer.Stop();
 
     var numberOfRecords = ((List<dynamic>)rows).Count;
@@ -260,7 +260,7 @@ internal static class ChangeDetection {
     var result = XXHash.Hash64(Encoding.UTF8.GetBytes(hashesAsOfNow.ToString()));
 
     stats.HashTime += timer.ElapsedMilliseconds;
-    Log.Debug($"Hashing completed: {timer.ElapsedMilliseconds.FriendlyFormat()}");
+    Log.Information($"Hashing completed: {timer.ElapsedMilliseconds.FriendlyFormat()}");
     timer.Stop();
 
     return Convert.ToString(result);
