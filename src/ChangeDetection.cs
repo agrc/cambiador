@@ -152,7 +152,7 @@ internal static class ChangeDetection {
       };
 
     var orderBy = "ASC";
-    if (DateTime.Now.Hour > 10) {
+    if (DateTime.Now.Hour > 14) {
       orderBy = "DESC";
     }
 
