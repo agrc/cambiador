@@ -9,13 +9,13 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/bin/Debug/net5.0/cambiador.dll",
+      "program": "${workspaceFolder}/src/bin/Debug/net6.0/cambiador.dll",
       "args": [],
       "cwd": "${workspaceFolder}",
       "console": "internalConsole",
       "stopAtEntry": false,
       "env": {
-        "TEST_VAR": "foo"
+        "CAMBIADOR_CONFIGURATION": "Development"
       }
     },
     {
