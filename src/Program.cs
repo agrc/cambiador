@@ -1,6 +1,6 @@
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddMountedSecrets(new[] { "db", "email" });
+builder.AddMountedSecrets(["db", "email"]);
 builder.Host.AddSerilog("cambiador", builder.Configuration["key"]);
 
 var app = builder.Build();

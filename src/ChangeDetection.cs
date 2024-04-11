@@ -98,7 +98,7 @@ internal static class ChangeDetection {
     var tables = await connection.QueryAsync<TrimData>(extraTablesSql);
 
     if (!tables.Any()) {
-      return Enumerable.Empty<string>();
+      return [];
     }
 
     await connection.ExecuteAsync(trimTablesSql, new { ids = tables.Select(x => x.Id) });
@@ -198,7 +198,7 @@ internal static class ChangeDetection {
       }
 
       if (!tableFieldMap.ContainsKey(meta.TableName())) {
-        tableFieldMap.Add(meta.TableName(), new List<string> { meta.Field });
+        tableFieldMap.Add(meta.TableName(), [meta.Field]);
 
         continue;
       }
