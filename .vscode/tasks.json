@@ -9,7 +9,7 @@
                 "build"
             ],
             "options": {
-                "cwd": "${workspaceFolder}"
+                "cwd": "${workspaceFolder}/src"
             },
             "problemMatcher": "$msCompile",
             "group": {

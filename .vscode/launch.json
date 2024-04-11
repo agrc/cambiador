@@ -9,13 +9,15 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/bin/Debug/net5.0/cambiador.dll",
+      "program": "${workspaceFolder}/src/bin/Debug/net8.0/cambiador.dll",
       "args": [],
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/src",
       "console": "internalConsole",
+      "internalConsoleOptions": "openOnSessionStart",
       "stopAtEntry": false,
       "env": {
-        "TEST_VAR": "foo"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:1337"
       }
     },
     {
