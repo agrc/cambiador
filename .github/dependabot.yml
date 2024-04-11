@@ -1,0 +1,18 @@
+version: 2
+updates:
+  - package-ecosystem: nuget
+    directory: /src
+    schedule:
+      interval: monthly
+    groups:
+      safe-api-dependencies:
+        update-types: ["minor", "patch"]
+      major-api-dependencies:
+        update-types: ["major"]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      ci-dependencies:
+        dependency-type: "production"
