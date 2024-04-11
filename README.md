@@ -1,6 +1,9 @@
 # cambiador
 
-esri geodatabase change detection for sql server with a spatial data type
+esri geodatabase change detection for sql server with a spatial data type.
+
+> [!CAUTION]
+> This branch was an experiment to migrate the code to the cloud but the performance was too poor to use in production.
 
 ![cambiador_sm](https://user-images.githubusercontent.com/325813/90076030-fd024180-dcbb-11ea-84b3-f18c825a3231.png)
 
