@@ -27,7 +27,7 @@ internal static class ChangeDetection {
     var tables = await connection.QueryAsync<TrimData>(extraTablesSql);
 
     if (!tables.Any()) {
-      return Enumerable.Empty<string>();
+      return [];
     }
 
     await connection.ExecuteAsync(trimTablesSql, new { ids = tables.Select(x => x.Id) });
@@ -51,7 +51,7 @@ internal static class ChangeDetection {
     Log.Debug($"Inserted a hash for {tableName}");
   }
 
-  // Creates the table on he first run or returns the name of the table if it already exists
+  // Creates the table on the first run or returns the name of the table if it already exists
   public static async Task<bool> EnsureChangeDetectionTableExists(SqlConnection connection) =>
     await connection.QueryFirstOrDefaultAsync<bool>(changeTableExistSql, new { changeTable });
 
@@ -93,7 +93,7 @@ internal static class ChangeDetection {
       }
 
       if (!tableFieldMap.ContainsKey(meta.TableName())) {
-        tableFieldMap.Add(meta.TableName(), new List<string> { meta.Field });
+        tableFieldMap.Add(meta.TableName(), [meta.Field]);
 
         continue;
       }
@@ -162,5 +162,5 @@ internal static class ChangeDetection {
   }
 
   public static async Task<string> GetHashOfLastRun(SqlConnection connection, string tableName) =>
-    await connection.QuerySingleOrDefaultAsync<string>(getHashSql, new { tableName });
+    await connection.QuerySingleOrDefaultAsync<string>(getHashSql, new { tableName }) ?? string.Empty;
 }
