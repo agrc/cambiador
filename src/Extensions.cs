@@ -2,6 +2,7 @@ using SendGrid;
 using Serilog.Sinks.Email;
 
 namespace cambiador;
+
 public static class Configuration {
   public static void AddMountedSecrets(this WebApplicationBuilder hostBuilder, IEnumerable<string> folderNames) {
     var path = Path.DirectorySeparatorChar.ToString();
@@ -22,7 +23,7 @@ public static class Logging {
     var email = new EmailConnectionInfo {
       SendGridClient = client,
       FromEmail = "noreply@utah.gov",
-      ToEmail = "sgourley@utah.gov",
+      ToEmail = "ugrc-developers@utah.gov",
       EmailSubject = "cambiador problems"
     };
 

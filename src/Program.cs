@@ -15,7 +15,7 @@ var client = new SendGridClient(configuration["SendGrid:ApiKey"]);
 var emailConnectionInfo = new EmailConnectionInfo {
   EmailSubject = "Cambiador on test app5 error",
   FromEmail = "noreply@utah.gov",
-  ToEmail = "sgourley@utah.gov",
+  ToEmail = "ugrc-developers@utah.gov",
   SendGridClient = client,
   FromName = "Cambiador"
 };
