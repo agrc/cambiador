@@ -6,3 +6,8 @@ updates:
       interval: monthly
     labels:
       - dependencies
+    cooldown:
+      default-days: 10
+      semver-major-days: 60
+      semver-minor-days: 14
+      semver-patch-days: 7
