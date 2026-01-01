@@ -1,5 +1,5 @@
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS dotnet
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS dotnet-sdk
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS dotnet
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS dotnet-sdk
 
 FROM dotnet-sdk as build
 COPY ./src ./build
